@@ -1033,11 +1033,6 @@
   dependencies:
     "@types/hammerjs" "^2.0.36"
 
-"@expo-google-fonts/space-mono@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@expo-google-fonts/space-mono/-/space-mono-0.2.0.tgz#ddc9f67529ef6a90909717d727aa4eeef9096901"
-  integrity sha512-Es+XippIzUOc9Q++p3NCDNNOSM2Z8KdMU5jN2qhZAsGDrhUPJx635Xtz7Lw42HPfOW+rqaan19rNtgvUBBN+CA==
-
 "@expo/babel-preset-cli@0.2.18":
   version "0.2.18"
   resolved "https://registry.yarnpkg.com/@expo/babel-preset-cli/-/babel-preset-cli-0.2.18.tgz#136acf8a0efe259e29ebc614b68552e5acb47d86"

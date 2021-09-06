@@ -1,31 +1,34 @@
-import * as React from 'react';
+import React from 'react';
 import { FlatList, StyleSheet, Text, View} from 'react-native';
 // import { Text, View } from '../components/Themed';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import Colors from '../constants/Colors';
-import { useFonts, SpaceMono_400Regular, SpaceMono_400Regular_Italic, SpaceMono_700Bold, SpaceMono_700Bold_Italic } from '@expo-google-fonts/space-mono';
+import { useFonts } from 'expo-font';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Data from '../constants/Data'
 import TodoList from '../components/TodoList';
 
 
 export default function TabOneScreen() {
-  let [fontsLoaded, error] = useFonts({
-    regular: SpaceMono_400Regular,
-    regItalic: SpaceMono_400Regular_Italic,
-    bold: SpaceMono_700Bold,
-    boldItalic: SpaceMono_700Bold_Italic,
-  });
+  let [fontLoaded] = useFonts({
+    'spaceMono': require('../assets/fonts/SpaceMono-Regular.ttf')
+  })
+
+  if(!fontLoaded) {
+    return null;
+  }
 
   return (
     <View style={styles.container}>
+      <View>
       {/* HEADER */}
       <View style={styles.header}>
       <Text style={styles.title}>Ga<Text style={styles.titleColor}>We</Text></Text>
       <View style={styles.separator} />
       </View>
       {/* END OF HEADER */}
+      </View>
 
       {/* ADD BUTTON */}
       <View style={styles.addBtnCont}>
@@ -35,8 +38,8 @@ export default function TabOneScreen() {
         </TouchableOpacity>
       </View>
       {/* END OF ADD BUTTON */}
-      <Text style={{fontFamily: 'bold'}}>Hey ho masih ga ngerti cara pake typescript</Text>
 
+      <View>
       {/* ACTIVITY LISTS */}
       <View>
         <FlatList 
@@ -45,11 +48,12 @@ export default function TabOneScreen() {
         showsHorizontalScrollIndicator={false}
         keyExtractor={(item) => item.name.toString()}
         renderItem={({item}) => (
-          <TodoList name={item.name} color={item.color} fontTitle='bold' fontCount='regular' fontSub='bold' />
+          <TodoList name={item.name} color={item.color} fontTitle='spaceMono' fontCount='spaceMono' fontSub='spaceMono' todos={item.todos.filter(todo => todo.completed).length} remaining={item.todos.length} />
         )}
         />
       </View>
       {/* END OF ACTIVITY LISTS */}
+      </View>
     </View>
   );
 }
@@ -58,7 +62,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    paddingTop: 24,
+    paddingVertical: 24,
+    justifyContent: 'space-between',
+
   },
   header: {
     alignItems:'center',
@@ -66,11 +72,11 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 40,
-    fontFamily: 'regular'
+    fontFamily: 'spaceMono'
   },
   titleColor: {
     fontSize: 40,
-    fontFamily: 'bold',
+    fontFamily: 'spaceMono',
     color: Colors.light.tint
   },
   separator: {
@@ -94,7 +100,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   addBtnText: {
-    fontFamily: 'regular',
+    fontFamily: 'spaceMono',
     color: Colors.light.tint,
   },
 });

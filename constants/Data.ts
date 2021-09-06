@@ -4,7 +4,7 @@ import Colors from './Colors';
 export default [
     {
         name: 'Plan a Trip',
-        color: '#24A6D9',
+        color: Colors.default.blue,
         todos: [
             {
                 title: 'Book Flight',
@@ -26,7 +26,7 @@ export default [
     },
     {
         name: 'Errands',
-        color: '#8022D9',
+        color: Colors.default.purple,
         todos: [
             {
                 title: 'Buy Milk',
@@ -44,7 +44,7 @@ export default [
     },
     {
         name: 'Study',
-        color: '#7FC8A9',
+        color: Colors.default.flatGreen,
         todos: [
             {
                 title: 'FireBase',

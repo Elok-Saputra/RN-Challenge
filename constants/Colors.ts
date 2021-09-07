@@ -5,12 +5,14 @@ export default {
   default: {
     blue: '#24A6D9',
     purple: '#8022D9',
-    lightBlue: '#A7CBD9',
-    flatGreen: '#7FC8A9',
+    lightBlue: '#63F9FC',
+    green: '#5CD859',
     softGreen: '#D5EEBB',
     peach: '#F6A9A9',
     orange: '#FFBF86',
     yellow: '#FFF47D',
+    grey: '#A4A4A4',
+    lightGrey: '#CACACA'
   },
   light: {
     text: '#2D3436',

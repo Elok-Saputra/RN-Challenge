@@ -1,5 +1,5 @@
-import React from 'react';
-import { FlatList, StyleSheet, Text, View} from 'react-native';
+import React, { useState } from 'react';
+import {FlatList, StyleSheet, Text, View, Modal} from 'react-native';
 // import { Text, View } from '../components/Themed';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
@@ -8,10 +8,16 @@ import { useFonts } from 'expo-font';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Data from '../constants/Data'
 import TodoList from '../components/TodoList';
+import AddActivityModal from '../components/AddActivityModal';
 
 
 export default function TabOneScreen() {
-  let [fontLoaded] = useFonts({
+  const [addActivityModal, setAddActivityModal] = useState(false)
+  const toggleAddActivity = () => {
+    setAddActivityModal(!addActivityModal)
+  }
+  
+  const [fontLoaded] = useFonts({
     'spaceMono': require('../assets/fonts/SpaceMono-Regular.ttf')
   })
 
@@ -19,20 +25,22 @@ export default function TabOneScreen() {
     return null;
   }
 
+
+
   return (
     <View style={styles.container}>
       <View>
-      {/* HEADER */}
-      <View style={styles.header}>
-      <Text style={styles.title}>Ga<Text style={styles.titleColor}>We</Text></Text>
-      <View style={styles.separator} />
-      </View>
-      {/* END OF HEADER */}
+        {/* HEADER */}
+        <View style={styles.header}>
+        <Text style={styles.title}>Ga<Text style={styles.titleColor}>We</Text></Text>
+        <View style={styles.separator} />
+        </View>
+        {/* END OF HEADER */}
       </View>
 
       {/* ADD BUTTON */}
       <View style={styles.addBtnCont}>
-        <TouchableOpacity style={styles.addBtn}>
+        <TouchableOpacity style={styles.addBtn} onPress={toggleAddActivity}>
         <Text style={styles.addBtnText}>Add New Activity</Text>
         <FontAwesome5 name="plus" size={24} color={Colors.light.tint} />
         </TouchableOpacity>
@@ -43,17 +51,22 @@ export default function TabOneScreen() {
       {/* ACTIVITY LISTS */}
       <View>
         <FlatList 
-        data={Data}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        keyExtractor={(item) => item.name.toString()}
-        renderItem={({item}) => (
-          <TodoList name={item.name} color={item.color} fontTitle='spaceMono' fontCount='spaceMono' fontSub='spaceMono' todos={item.todos.filter(todo => todo.completed).length} remaining={item.todos.length} />
-        )}
+          data={Data}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          keyExtractor={(item) => item.name.toString()}
+          renderItem={({item}) => (
+            <TodoList name={item.name} color={item.color} fontTitle='spaceMono' fontCount='spaceMono' fontSub='spaceMono' todos={item.todos.filter(todo => todo.completed).length} remaining={item.todos.length} todosLength={item.todos.length} dataList={item.todos}/>
+          )}
         />
       </View>
       {/* END OF ACTIVITY LISTS */}
       </View>
+
+      {/* POP UP MODAL */}
+      <Modal animationType='slide' visible={addActivityModal} onRequestClose={toggleAddActivity}>
+        <AddActivityModal closeModal={toggleAddActivity} />
+      </Modal>
     </View>
   );
 }

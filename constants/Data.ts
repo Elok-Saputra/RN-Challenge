@@ -44,7 +44,7 @@ export default [
     },
     {
         name: 'Study',
-        color: Colors.default.flatGreen,
+        color: Colors.default.green,
         todos: [
             {
                 title: 'FireBase',

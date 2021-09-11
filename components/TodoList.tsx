@@ -1,6 +1,11 @@
 import React, {FC, useState} from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Modal } from 'react-native'
 import TodoModal from './TodoModal'
+
+interface data{
+    title: string
+    completed: boolean
+}
 interface Props {
     name: string;
     color: string;
@@ -10,8 +15,7 @@ interface Props {
     todos: number;
     remaining: number;
     todosLength: number;
-    title: string
-    dataList: []
+    dataList: data[]
 }
 
 const TodoList: FC<Props> = (props): JSX.Element => {
@@ -42,7 +46,16 @@ const TodoList: FC<Props> = (props): JSX.Element => {
             </TouchableOpacity>
 
             {/* MODAL */}
-            <TodoModal visible={showListVisible} close={toggleListModal} closeModal={toggleListModal} name={props.name} color={props.color} todos={props.todos} todosLength={props.todosLength} data={props.dataList}/>
+            <TodoModal 
+            visible={showListVisible} 
+            close={toggleListModal}
+            closeModal={toggleListModal}
+            name={props.name}
+            color={props.color}
+            todos={props.todos}
+            todosLength={props.todosLength}
+            dataList={props.dataList}
+            />
         </>
 
 )

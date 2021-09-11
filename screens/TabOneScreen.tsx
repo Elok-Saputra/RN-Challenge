@@ -56,7 +56,15 @@ export default function TabOneScreen() {
           showsHorizontalScrollIndicator={false}
           keyExtractor={(item) => item.name.toString()}
           renderItem={({item}) => (
-            <TodoList name={item.name} color={item.color} fontTitle='spaceMono' fontCount='spaceMono' fontSub='spaceMono' todos={item.todos.filter(todo => todo.completed).length} remaining={item.todos.length} todosLength={item.todos.length} dataList={item.todos}/>
+            <TodoList 
+            name={item.name} 
+            color={item.color} 
+            fontTitle='spaceMono' 
+            fontCount='spaceMono' 
+            fontSub='spaceMono' 
+            todos={item.todos.filter(todo => todo.completed).length} 
+            remaining={item.todos.length} todosLength={item.todos.length} 
+            dataList={item.todos}/>
           )}
         />
       </View>

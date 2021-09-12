@@ -7,6 +7,7 @@ interface data{
     completed: boolean
 }
 interface Props {
+    id: number;
     name: string;
     color: string;
     fontTitle: string;
@@ -16,6 +17,7 @@ interface Props {
     remaining: number;
     todosLength: number;
     dataList: data[]
+    updateList: (arg: any) => void
 }
 
 const TodoList: FC<Props> = (props): JSX.Element => {
@@ -55,6 +57,7 @@ const TodoList: FC<Props> = (props): JSX.Element => {
             todos={props.todos}
             todosLength={props.todosLength}
             dataList={props.dataList}
+            updateList={props.updateList}
             />
         </>
 

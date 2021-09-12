@@ -6,10 +6,13 @@ import Data from '../constants/Data'
 
 interface Props {
     closeModal: () => void;
+    addList: (arg: any) => void;
 }
 
  const AddActivityModal: FC<Props> = (props): JSX.Element => {
-     const [activityName, setActivityName] = useState('');
+     const [name, setName] = useState('');
+     const [id, setId] = useState(1)
+     const [todos, setTodos] = useState([])
      
     //  FOR COLOR PICKER
      const backgroundColor = [
@@ -22,25 +25,24 @@ interface Props {
          Colors.default.yellow,
         ]
 
-    const [colors, setColors] = useState(backgroundColor[0])
+    const [color, setColor] = useState(backgroundColor[0])
 
     // TO RENDER THE COLOR PICKER
     const renderColor = () => {
         return backgroundColor.map(color => (
-            <TouchableOpacity key={color} style={[styles.colorSelect, {backgroundColor: color}]} onPress={() => setColors(color)} />
+            <TouchableOpacity key={color} style={[styles.colorSelect, {backgroundColor: color}]} onPress={() => setColor(color)} />
         ))
     }
 
     
     const createActivity = () => {
-        Data.push({
-            name: activityName,
-            color: colors,
-            todos: []
-        });
+        const list = {id, name, color, todos}
+        props.addList(list)
 
-        setActivityName(activityName);
-        setColors(colors)
+        setName(name);
+        setColor(color)
+        setId(id)
+        setTodos(todos)
         props.closeModal();
     }
 
@@ -58,7 +60,10 @@ interface Props {
                 {/* ======================================================== */}
 
                 {/* TEXT INPUT */}
-                <TextInput style={[styles.input, {borderColor: colors,}]} placeholder='Add Activity Name' onChangeText={(text) => setActivityName(text)} value={activityName}/>
+                <TextInput 
+                style={[styles.input, {borderColor: color,}]} 
+                placeholder='Add Activity Name' 
+                onChangeText={(text) => setName(text)} value={name}/>
                 {/* END OF TEXT INPUT */}
 
                 {/* COLOR PICKER */}
@@ -68,7 +73,7 @@ interface Props {
                 {/* END OF COLOR PICKER */}
 
                 {/* CREATE BUTTON */}
-                <TouchableOpacity style={[styles.createBtn, {backgroundColor: colors}]} onPress={createActivity}>
+                <TouchableOpacity style={[styles.createBtn, {backgroundColor: color}]} onPress={createActivity}>
                     <Text style={styles.createText}>Create!</Text>
                 </TouchableOpacity>
                 {/* CREATE BUTTON */}

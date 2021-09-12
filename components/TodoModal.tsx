@@ -1,5 +1,15 @@
 import React, {FC, useState} from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Modal, SafeAreaView, FlatList, KeyboardAvoidingView, TextInput } from 'react-native'
+import { 
+    StyleSheet, 
+    View, 
+    Text, 
+    TouchableOpacity, 
+    Modal, 
+    SafeAreaView, 
+    FlatList, 
+    KeyboardAvoidingView, 
+    TextInput, 
+    Keyboard } from 'react-native'
 import { AntDesign, Ionicons } from '@expo/vector-icons'
 import Colors from '../constants/Colors';
 import Data from '../constants/Data'
@@ -12,6 +22,7 @@ interface Props {
     visible: boolean
     close: () => void
     closeModal: () => void
+    updateList: (arg: any) => void
     name: string
     color: string
     todos: number
@@ -20,12 +31,30 @@ interface Props {
 }
 
 const TodoModal: FC<Props> = (props): JSX.Element => {
-    const [name, setName] = useState(props.name)
-    const [color, setColor] = useState(props.color)
     const [data, setData] = useState(props.dataList)
+    const [newTodo, setNewTodo] = useState('')
+
+    const toggleTodoCompleted = (index: any) => {
+        let list = props
+        list.dataList[index].completed = !list.dataList[index].completed
+
+        props.updateList(list)
+    }
+
+    const addTodo = () => {
+        let list = props
+        list.dataList.push({
+            title: newTodo,
+            completed: false,
+        })
+        props.updateList(list)
+        setNewTodo('')
+        Keyboard.dismiss()
+    }
 
     const completedCount = props.todos
     return (
+        <KeyboardAvoidingView style={{flex: 1}} behavior='position'>
         <Modal
         animationType='slide'
         visible={props.visible}
@@ -36,12 +65,11 @@ const TodoModal: FC<Props> = (props): JSX.Element => {
                     <AntDesign name='close' size={24} color={Colors.light.text} />
                 </TouchableOpacity>
             {/* END OF ICON CLOSE */}
-            </SafeAreaView>
 
             {/* TITLE AND NUMBER OF TASKS */}
-            <View style={[styles.section, styles.header, {borderBottomColor: color}]}>
+            <View style={[styles.section, styles.header, {borderBottomColor: props.color}]}>
                 <View>
-                    <Text style={styles.title}>{name}</Text>
+                    <Text style={styles.title}>{props.name}</Text>
                     <Text style={styles.taskCount}>{completedCount} of {props.todosLength} tasks</Text>
                 </View>
             </View>
@@ -51,10 +79,10 @@ const TodoModal: FC<Props> = (props): JSX.Element => {
             <View style={[styles.section, {flex: 3}]}>
                 <FlatList 
                 data={data} 
-                renderItem={({item}) => (
+                renderItem={({item, index}) => (
                     <View style={styles.todoContainer}>
                         {/* CHECKBOX */}
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => toggleTodoCompleted(index)}>
                             <Ionicons 
                             name={item.completed ? 'ios-square' : 'ios-square-outline'} 
                             size={24} color={Colors.default.grey} 
@@ -79,23 +107,33 @@ const TodoModal: FC<Props> = (props): JSX.Element => {
             {/* END OF TASKS */}
 
             {/* INPUT TASK FIELD */}
-            <KeyboardAvoidingView style={[
+            <View style={[
                 styles.section, styles.footer
             ]}>
                 {/* TEXT INPUT */}
-                <TextInput style={[styles.input, {borderColor: color}]} />
+                <TextInput 
+                    style={[styles.input, {borderColor: props.color}]}
+                    placeholder='Add new task'
+                    onChangeText={text => setNewTodo(text)}
+                    value={newTodo}
+                />
                 {/* END OF TEXT INPUT */}
 
                 {/* PLUS BUTTON */}
-                <TouchableOpacity style={[styles.addTodo, {backgroundColor: color}]}>
+                <TouchableOpacity 
+                style={[styles.addTodo, {backgroundColor: props.color}]}
+                onPress={addTodo}
+                >
                     <AntDesign name='plus' size={16} color='white' />
                 </TouchableOpacity>
                 {/* END OF PLUS BUTTON */}
 
-            </KeyboardAvoidingView>
+            </View>
             {/* END OF INPUT TASK FIELD */}
+            </SafeAreaView>
 
         </Modal>
+        </KeyboardAvoidingView>
     )
 }
 
@@ -103,13 +141,13 @@ export default TodoModal;
 
 const styles = StyleSheet.create({
     safeArea: {
-        flex: 1,
+        flexGrow: 1,
         justifyContent: 'center',
         alignItems: 'center',
     },
     closeBtn: {
         position: 'absolute',
-        top: 64,
+        top: 32,
         right: 32,
         zIndex: 10,
     },
@@ -144,18 +182,20 @@ const styles = StyleSheet.create({
         flex: 1,
         height: 48,
         borderWidth: 1,
-        borderRadius: 6,
+        borderRadius: 8,
         marginRight: 8,
         paddingHorizontal: 8,
+        fontFamily: 'spaceMono'
     },
     addTodo: {
-        borderRadius: 4,
+        borderRadius: 6,
         padding: 16,
         alignItems: 'center',
         justifyContent: 'center', 
     },
     todoContainer: {
-        paddingVertical: 16,
+        marginTop: 6,
+        paddingVertical: 12,
         flexDirection: 'row',
         alignItems: 'center',
     },

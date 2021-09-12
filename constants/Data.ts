@@ -3,6 +3,7 @@ import Colors from './Colors';
 
 export default [
     {
+        id: 1,
         name: 'Plan a Trip',
         color: Colors.default.blue,
         todos: [
@@ -25,6 +26,7 @@ export default [
         ]
     },
     {
+        id: 2,
         name: 'Errands',
         color: Colors.default.purple,
         todos: [
@@ -43,6 +45,7 @@ export default [
         ]
     },
     {
+        id: 3,
         name: 'Study',
         color: Colors.default.green,
         todos: [
@@ -69,6 +72,7 @@ export default [
         ]
     },
     {
+        id: 4,
         name: 'Build Portfolio Website',
         color: Colors.default.peach,
         todos: [

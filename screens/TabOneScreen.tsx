@@ -13,6 +13,8 @@ import AddActivityModal from '../components/AddActivityModal';
 
 export default function TabOneScreen() {
   const [addActivityModal, setAddActivityModal] = useState(false)
+  const [lists, setLists] = useState(Data)
+
   const toggleAddActivity = () => {
     setAddActivityModal(!addActivityModal)
   }
@@ -25,7 +27,15 @@ export default function TabOneScreen() {
     return null;
   }
 
+  const addList = (list: any) => {
+    setLists([...lists, {...list, id: lists.length + 1, todos:[]}])
+  }
 
+  const updateList = (list: any) => {
+    setLists(lists.map(e => {
+      return e.id === list.id ? list : e
+    }))
+  }
 
   return (
     <View style={styles.container}>
@@ -51,12 +61,13 @@ export default function TabOneScreen() {
       {/* ACTIVITY LISTS */}
       <View>
         <FlatList 
-          data={Data}
+          data={lists}
           horizontal
           showsHorizontalScrollIndicator={false}
           keyExtractor={(item) => item.name.toString()}
           renderItem={({item}) => (
             <TodoList 
+            id={item.id}
             name={item.name} 
             color={item.color} 
             fontTitle='spaceMono' 
@@ -64,16 +75,22 @@ export default function TabOneScreen() {
             fontSub='spaceMono' 
             todos={item.todos.filter(todo => todo.completed).length} 
             remaining={item.todos.length} todosLength={item.todos.length} 
-            dataList={item.todos}/>
+            dataList={item.todos}
+            updateList={updateList}
+            />
           )}
+          keyboardShouldPersistTaps='always'
         />
       </View>
       {/* END OF ACTIVITY LISTS */}
       </View>
 
       {/* POP UP MODAL */}
-      <Modal animationType='slide' visible={addActivityModal} onRequestClose={toggleAddActivity}>
-        <AddActivityModal closeModal={toggleAddActivity} />
+      <Modal 
+      animationType='slide' 
+      visible={addActivityModal} 
+      onRequestClose={toggleAddActivity}>
+        <AddActivityModal closeModal={toggleAddActivity} addList={addList} />
       </Modal>
     </View>
   );

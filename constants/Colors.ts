@@ -12,7 +12,8 @@ export default {
     orange: '#FFBF86',
     yellow: '#FFF47D',
     grey: '#A4A4A4',
-    lightGrey: '#CACACA'
+    lightGrey: '#CACACA',
+    red: '#D85963',
   },
   light: {
     text: '#2D3436',

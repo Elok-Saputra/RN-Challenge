@@ -9,10 +9,12 @@ import {
     FlatList, 
     KeyboardAvoidingView, 
     TextInput, 
-    Keyboard } from 'react-native'
+    Keyboard,
+    Animated
+} from 'react-native'
 import { AntDesign, Ionicons } from '@expo/vector-icons'
 import Colors from '../constants/Colors';
-import Data from '../constants/Data'
+import Swipeable from 'react-native-gesture-handler/Swipeable' 
 
 interface data{
     title: string
@@ -34,6 +36,8 @@ const TodoModal: FC<Props> = (props): JSX.Element => {
     const [data, setData] = useState(props.dataList)
     const [newTodo, setNewTodo] = useState('')
 
+    const completedCount = props.todos
+
     const toggleTodoCompleted = (index: any) => {
         let list = props
         list.dataList[index].completed = !list.dataList[index].completed
@@ -52,7 +56,48 @@ const TodoModal: FC<Props> = (props): JSX.Element => {
         Keyboard.dismiss()
     }
 
-    const completedCount = props.todos
+    const renderTodo = (todo: any, index: any) => {
+        return (
+            <Swipeable renderRightActions={(_,dragX) => rightActions(dragX, index)}>
+                <View style={styles.todoContainer}>
+                    {/* CHECKBOX */}
+                    <TouchableOpacity onPress={() => toggleTodoCompleted(index)}>
+                        <Ionicons 
+                        name={todo.completed ? 'ios-square' : 'ios-square-outline'} 
+                        size={24} color={Colors.default.grey} 
+                        style={{width: 32}} />
+                    </TouchableOpacity>
+                    {/* END OF CHECKBOX */}
+
+                    {/* TASKS NAME */}
+                    <Text style={[styles.todo, 
+                        {color: todo.completed ? Colors.default.grey : Colors.light.text, 
+                        textDecorationLine: todo.completed ? 'line-through' : 'none'
+                        }]}>
+                        {todo.title}
+                    </Text>
+                </View>
+            </Swipeable>
+        )
+    }
+
+    const rightActions = (dragX: any, index: any) => {
+        const scale = dragX.interpolate({
+            inputRange: [-100, 0],
+            outputRange: [1, 0.9],
+            extrapolate: 'clamp'
+        })
+        return (
+            <TouchableOpacity>
+                <Animated.View style={styles.deleteButton}>
+                    <Animated.Text style={{color: 'white', fontFamily: 'spaceMono', transform: [{scale}]}}>
+                        Delete
+                    </Animated.Text>
+                </Animated.View>
+            </TouchableOpacity>
+        )
+    }
+
     return (
         <KeyboardAvoidingView style={{flex: 1}} behavior='position'>
         <Modal
@@ -79,28 +124,8 @@ const TodoModal: FC<Props> = (props): JSX.Element => {
             <View style={[styles.section, {flex: 3}]}>
                 <FlatList 
                 data={data} 
-                renderItem={({item, index}) => (
-                    <View style={styles.todoContainer}>
-                        {/* CHECKBOX */}
-                        <TouchableOpacity onPress={() => toggleTodoCompleted(index)}>
-                            <Ionicons 
-                            name={item.completed ? 'ios-square' : 'ios-square-outline'} 
-                            size={24} color={Colors.default.grey} 
-                            style={{width: 32}} />
-                        </TouchableOpacity>
-                        {/* END OF CHECKBOX */}
-
-                        {/* TASKS NAME */}
-                        <Text style={[styles.todo, 
-                            {color: item.completed ? Colors.default.grey : Colors.light.text, 
-                            textDecorationLine: item.completed ? 'line-through' : 'none'
-                            }]}>
-                            {item.title}
-                        </Text>
-                    </View>
-                )}
+                renderItem={({item, index}) => renderTodo(item, index)}
                 keyExtractor={item => item.title} 
-                contentContainerStyle={{paddingHorizontal: 32, paddingVertical: 64}}
                 showsVerticalScrollIndicator={false}
                 />
             </View>
@@ -152,7 +177,8 @@ const styles = StyleSheet.create({
         zIndex: 10,
     },
     section: {
-        flex: 1,
+        // flex: 1,
+        paddingVertical: 24,
         alignSelf: 'stretch',
     },
     header: {
@@ -168,7 +194,7 @@ const styles = StyleSheet.create({
     },
     taskCount: {
         marginTop: 4,
-        marginBottom: 16,
+        marginBottom: 6,
         color: Colors.default.grey,
         fontFamily: 'spaceMono',
         fontWeight: '600'
@@ -194,14 +220,22 @@ const styles = StyleSheet.create({
         justifyContent: 'center', 
     },
     todoContainer: {
-        marginTop: 6,
-        paddingVertical: 12,
+        // marginTop: 4,
+        paddingVertical: 8,
         flexDirection: 'row',
         alignItems: 'center',
+        paddingLeft: 32
     },
     todo: {
         color: Colors.light.text,
         fontFamily: 'spaceMono',
         fontWeight: '600',
     },
+    deleteButton: {
+        flex: 1,
+        backgroundColor: Colors.default.red,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 80,
+    }
 })
